@@ -1,5 +1,5 @@
 package es.wanderteam.tilerun;
 
-public class claseDePrueba {
+public class claseDePrueba22 {
 
 }
