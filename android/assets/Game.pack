@@ -1,0 +1,26 @@
+
+Game.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+tileBoxGreen
+  rotate: false
+  xy: 1, 1
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+tileBoxRed
+  rotate: false
+  xy: 203, 1
+  size: 200, 200
+  orig: 200, 200
+  offset: 0, 0
+  index: -1
+itemYellow
+  rotate: false
+  xy: 405, 101
+  size: 100, 100
+  orig: 100, 100
+  offset: 0, 0
+  index: -1

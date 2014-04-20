@@ -1,0 +1,33 @@
+
+UI.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+mainScreen
+  rotate: false
+  xy: 1, 1
+  size: 500, 500
+  orig: 500, 500
+  offset: 0, 0
+  index: -1
+buttonPlay
+  rotate: false
+  xy: 503, 424
+  size: 237, 77
+  orig: 237, 77
+  offset: 0, 0
+  index: -1
+buttonScore
+  rotate: false
+  xy: 503, 345
+  size: 237, 77
+  orig: 237, 77
+  offset: 0, 0
+  index: -1
+buttonOptions
+  rotate: false
+  xy: 742, 372
+  size: 129, 129
+  orig: 129, 129
+  offset: 0, 0
+  index: -1
