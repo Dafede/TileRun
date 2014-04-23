@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen{
 	Stage stage;
@@ -36,7 +38,10 @@ public class MenuScreen implements Screen{
 		
 		//Create and add background
 		background = new Image(uiSkin.getDrawable("mainScreen"));
+		background.setWidth(Gdx.graphics.getWidth());
+		background.setHeight(Gdx.graphics.getHeight());
 		stage.addActor(background);
+		
 		
 		//Create the style of the play button, create the playbutton whit that style,
 		//positioning the play button and adding it to the stage
@@ -44,7 +49,6 @@ public class MenuScreen implements Screen{
 		ibsPlay.imageUp = uiSkin.getDrawable("buttonPlay");
 		
 
-		
 		ibPlay = new ImageButton(ibsPlay);
 		ibPlay.setName("UI_PLAY_BUTTON");
 		ibPlay.setX((Gdx.graphics.getWidth() - ibPlay.getWidth()) / 2);
@@ -60,7 +64,12 @@ public class MenuScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new PlayScreen());
+				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
+					@Override
+					public void run() {
+						((Game)Gdx.app.getApplicationListener()).setScreen(new PlayScreen());
+					}
+				})));
 				super.touchUp(event, x, y, pointer, button);
 			}
 			
@@ -88,7 +97,13 @@ public class MenuScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new OptionsScreen());
+				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
+					
+					@Override
+					public void run() {
+						((Game)Gdx.app.getApplicationListener()).setScreen(new OptionsScreen());
+					}
+				})));
 				super.touchUp(event, x, y, pointer, button);
 			}
 			
@@ -116,7 +131,14 @@ public class MenuScreen implements Screen{
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
-				((Game)Gdx.app.getApplicationListener()).setScreen(new ScoreScreen());
+					stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
+					
+					@Override
+					public void run() {
+						((Game)Gdx.app.getApplicationListener()).setScreen(new ScoreScreen());
+					}
+				})));
+				
 				super.touchUp(event, x, y, pointer, button);
 			}
 			
@@ -137,7 +159,8 @@ public class MenuScreen implements Screen{
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		//when resize the window, resize the viewport too for update the colision boxes etc
+		stage.getViewport().update(width, height, true);
 	}
 
 	@Override
