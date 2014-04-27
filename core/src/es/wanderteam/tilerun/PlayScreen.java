@@ -1,10 +1,13 @@
 package es.wanderteam.tilerun;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -12,6 +15,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class PlayScreen implements Screen, InputProcessor {
 
 	SpriteBatch batch;
+	BitmapFont winFont;
+	
 	
 	/** Visual game data **/
 	TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("Game.pack"));
@@ -27,8 +32,8 @@ public class PlayScreen implements Screen, InputProcessor {
 	 *  6 == Old
 	 *  7 == Next and Ball
 	 */
-	
-	int[][] board = new int[][]{
+	int actualLevel = 0;
+	int[][] level1 = new int[][]{
 			{ 0, 1, 2, 1},
 			{ 3, 1, 0, 1},
 			{ 0, 1, 1, 1},
@@ -39,18 +44,29 @@ public class PlayScreen implements Screen, InputProcessor {
 			{ 0, 0, 0, 5},
 			{ 0, 0, 0, 4}
 	};
-	
-	Sprite[][] boardSprites = new Sprite[][]{
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null},
-			{ null, null, null, null}
+	int[][] level2 = new int[][]{
+			{ 2, 1, 1, 1, 3},
+			{ 1, 0, 1, 2, 2},
+			{ 1, 1, 2, 1, 1},
+			{ 5, 0, 1, 1, 2},
+			{ 4, 5, 1, 2, 1}
 	};
+	int[][] level3 = new int[][]{
+			{ 0, 0, 3, 0, 0},
+			{ 2, 2, 1, 1, 2},
+			{ 1, 1, 1, 1, 1},
+			{ 1, 1, 1, 1, 1},
+			{ 1, 2, 2, 2, 1},
+			{ 1, 0, 1, 1, 2},
+			{ 1, 2, 1, 0, 1},
+			{ 1, 2, 1, 1, 1},
+			{ 0, 5, 4, 0, 0}
+	};
+	ArrayList<int[][]> listaBoard = new ArrayList<int[][]>();
+	
+	Sprite[][] boardSprites;
+	
+	int[][] board;
 	
 	//Percentaje of space between tiles
 	float padding = 0.01f;
@@ -59,9 +75,22 @@ public class PlayScreen implements Screen, InputProcessor {
 	
 	@Override
 	public void show() {
+		//CONSTRUCTOR
 		batch = new SpriteBatch();
 		Gdx.input.setInputProcessor(this);
 		
+		listaBoard.add(level1);
+		listaBoard.add(level2);
+		listaBoard.add(level3);
+		
+		GenerateLevel(actualLevel);
+		
+		//winFont = new BitmapFont(Gdx.files.internal("Calibri.fnt"),Gdx.files.internal("Calibri.png"),false);
+	}
+	
+	public void GenerateLevel(int level)
+	{
+		board  = listaBoard.get(level);
 		int numTilesHeight = board.length;
 		int numTilesWight = board[board.length - 1].length; //error si la matriz board no esta definida
 		int screenHeight = Gdx.graphics.getHeight();
@@ -75,9 +104,12 @@ public class PlayScreen implements Screen, InputProcessor {
 		
 		System.out.println("Tile Data: " + tileSpriteWidth + " " + tileSpriteHeight + " " +paddingWidth + " " + paddingHeight);
 		
-		for(int i = 0; i < board.length; ++i){
-			for(int j = 0; j < board[i].length; ++j){
-								
+		
+		boardSprites = new Sprite[numTilesHeight][];
+		for(int i = 0; i < numTilesHeight; ++i){
+			boardSprites[i] = new Sprite[numTilesWight];
+			for(int j = 0; j < numTilesWight; ++j){
+				
 				if(board[i][j] != 0){
 					
 					if(board[i][j] == 4){
@@ -90,7 +122,6 @@ public class PlayScreen implements Screen, InputProcessor {
 					
 					newTile.setX(j * tileSpriteWidth + (2 * j + 1) * (screenWidth * padding));
 					newTile.setY(screenHeight - ((i + 1) * tileSpriteHeight + (2 * i + 1) * (screenHeight * padding)));
-
 					System.out.println(i + " " + j + " :" + newTile.getX() + " " + newTile.getY());
 					boardSprites[i][j] = newTile;
 				}
@@ -101,6 +132,7 @@ public class PlayScreen implements Screen, InputProcessor {
 	
 	@Override
 	public void render(float delta) {
+		//RENDER SE LLAMA CADA VEZ
 		Gdx.gl.glClearColor(0, 0, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		
@@ -111,7 +143,16 @@ public class PlayScreen implements Screen, InputProcessor {
 		// DRAW
 		Sprite ball = new Sprite(atlas.findRegion("itemYellow"));
 		batch.begin();
-		
+		/** Logic game data **/
+		/** 0 == No Tile
+		 *  1 == Tile
+		 *  2 == Ball
+		 *  3 == Fin
+		 *  4 == Now
+		 *  5 == Next
+		 *  6 == Old
+		 *  7 == Next and Ball
+		 */
 		for(int i = 0; i < boardSprites.length; ++i){
 			for(int j = 0; j < boardSprites[i].length; ++j){
 				if(boardSprites[i][j] != null){
@@ -139,7 +180,7 @@ public class PlayScreen implements Screen, InputProcessor {
 						break;
 					case 4:
 						//Draw normal tile GREEN
-						boardSprites[i][j].setColor(Color.GREEN);
+						boardSprites[i][j].setColor(Color.GRAY);
 						boardSprites[i][j].draw(batch);						
 						break;
 					case 5:
@@ -243,7 +284,16 @@ public class PlayScreen implements Screen, InputProcessor {
 				}
 			}
 		}
-		
+		/** Logic game data **/
+		/** 0 == No Tile
+		 *  1 == Tile
+		 *  2 == Ball
+		 *  3 == Fin
+		 *  4 == Now
+		 *  5 == Next
+		 *  6 == Old
+		 *  7 == Next and Ball
+		 */
 		Sprite oldTileSprite;
 		System.out.println("Touch UP inside " + touchedTileX + " " + touchedTileY);
 		switch (board[touchedTileX][touchedTileY]) {
@@ -258,6 +308,37 @@ public class PlayScreen implements Screen, InputProcessor {
 			break;
 		case 3:
 			System.out.println("FIN");
+			if(touchedTileX + 1 <board.length)
+			{
+				if(board[touchedTileX + 1][touchedTileY] == 4)
+				{
+					GenerateLevel(++actualLevel);
+				}
+			}
+			
+			if(touchedTileY + 1 < boardSprites[touchedTileX].length)
+			{
+				if(board[touchedTileX][touchedTileY + 1] == 4)
+				{
+					GenerateLevel(++actualLevel);
+				}
+			}
+			
+			if(touchedTileX - 1 >= 0)
+			{
+				if(board[touchedTileX - 1][touchedTileY] == 4)
+				{
+					GenerateLevel(++actualLevel);
+				}
+			}
+			
+			if(touchedTileY - 1 >= 0)
+			{
+				if(board[touchedTileX][touchedTileY - 1] == 4)
+				{
+					GenerateLevel(++actualLevel);
+				}
+			}
 			break;
 		case 4:
 			System.out.println("NOW TILE");
@@ -277,13 +358,31 @@ public class PlayScreen implements Screen, InputProcessor {
 					}
 				}
 			}
-			
-			
+
 			board[touchedTileX][touchedTileY] = 4;
-			if(touchedTileX + 1 <board.length && board[touchedTileX + 1][touchedTileY] == 1) board[touchedTileX + 1][touchedTileY] = 5;
-			if(touchedTileY + 1 < boardSprites[touchedTileX].length && board[touchedTileX][touchedTileY + 1] == 1) board[touchedTileX][touchedTileY + 1] = 5;
-			if(touchedTileX - 1 >= 0 && board[touchedTileX - 1][touchedTileY] == 1) board[touchedTileX - 1][touchedTileY] = 5;
-			if(touchedTileY - 1 >= 0 && board[touchedTileX][touchedTileY - 1] == 1) board[touchedTileX][touchedTileY - 1] = 5;
+			if(touchedTileX + 1 <board.length)
+			{
+				if(board[touchedTileX + 1][touchedTileY] == 1) board[touchedTileX + 1][touchedTileY] = 5;
+				if(board[touchedTileX + 1][touchedTileY] == 2) board[touchedTileX + 1][touchedTileY] = 7;
+			}
+			
+			if(touchedTileY + 1 < boardSprites[touchedTileX].length)
+			{
+				if(board[touchedTileX][touchedTileY + 1] == 1) board[touchedTileX][touchedTileY + 1] = 5;
+				if(board[touchedTileX][touchedTileY + 1] == 2) board[touchedTileX][touchedTileY + 1] = 7;
+			}
+			
+			if(touchedTileX - 1 >= 0)
+			{
+				if(board[touchedTileX - 1][touchedTileY] == 1) board[touchedTileX - 1][touchedTileY] = 5;
+				if(board[touchedTileX - 1][touchedTileY] == 2) board[touchedTileX - 1][touchedTileY] = 7;
+			}
+			
+			if(touchedTileY - 1 >= 0)
+			{
+				if(board[touchedTileX][touchedTileY - 1] == 1) board[touchedTileX][touchedTileY - 1] = 5;
+				if(board[touchedTileX][touchedTileY - 1] == 2) board[touchedTileX][touchedTileY - 1] = 7;
+			}
 
 			oldTileSprite = new Sprite(atlas.findRegion("tileBoxRed"));
 			oldTileSprite.setX(boardSprites[nowTileX][nowTileY].getX());
@@ -316,10 +415,29 @@ public class PlayScreen implements Screen, InputProcessor {
 			
 			
 			board[touchedTileX][touchedTileY] = 4;
-			if(touchedTileX + 1 <board.length && board[touchedTileX + 1][touchedTileY] == 1) board[touchedTileX + 1][touchedTileY] = 5;
-			if(touchedTileY + 1 < boardSprites[touchedTileX].length && board[touchedTileX][touchedTileY + 1] == 1) board[touchedTileX][touchedTileY + 1] = 5;
-			if(touchedTileX - 1 >= 0 && board[touchedTileX - 1][touchedTileY] == 1) board[touchedTileX - 1][touchedTileY] = 5;
-			if(touchedTileY - 1 >= 0 && board[touchedTileX][touchedTileY - 1] == 1) board[touchedTileX][touchedTileY - 1] = 5;
+			if(touchedTileX + 1 <board.length)
+			{
+				if(board[touchedTileX + 1][touchedTileY] == 1) board[touchedTileX + 1][touchedTileY] = 5;
+				if(board[touchedTileX + 1][touchedTileY] == 2) board[touchedTileX + 1][touchedTileY] = 7;
+			}
+			
+			if(touchedTileY + 1 < boardSprites[touchedTileX].length)
+			{
+				if(board[touchedTileX][touchedTileY + 1] == 1) board[touchedTileX][touchedTileY + 1] = 5;
+				if(board[touchedTileX][touchedTileY + 1] == 2) board[touchedTileX][touchedTileY + 1] = 7;
+			}
+			
+			if(touchedTileX - 1 >= 0)
+			{
+				if(board[touchedTileX - 1][touchedTileY] == 1) board[touchedTileX - 1][touchedTileY] = 5;
+				if(board[touchedTileX - 1][touchedTileY] == 2) board[touchedTileX - 1][touchedTileY] = 7;
+			}
+			
+			if(touchedTileY - 1 >= 0)
+			{
+				if(board[touchedTileX][touchedTileY - 1] == 1) board[touchedTileX][touchedTileY - 1] = 5;
+				if(board[touchedTileX][touchedTileY - 1] == 2) board[touchedTileX][touchedTileY - 1] = 7;
+			}
 
 			oldTileSprite = new Sprite(atlas.findRegion("tileBoxRed"));
 			oldTileSprite.setX(boardSprites[nowTileX][nowTileY].getX());
