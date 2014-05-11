@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 
 public class Puzzle {
 	
-	TileState[][] map;
+	Cell[][] map;
+	int initCellX, initCellY;
 	
 	public Puzzle() {
 		loadFromPNG(Gdx.files.internal("level0.png"));
@@ -34,7 +35,7 @@ public class Puzzle {
 		int TILE_WITH_BALL = 0xffff00; //YELLOW
 		
 		Pixmap pixmap = new Pixmap(fileHandle);
-		map = new TileState[pixmap.getHeight()][pixmap.getWidth()];
+		map = new Cell[pixmap.getHeight()][pixmap.getWidth()];
 		int W = pixmap.getWidth();
 		int H = pixmap.getHeight();
 		System.out.println(NO_TILE + " " + TILE + " " + TILE_WITH_BALL);
@@ -45,26 +46,28 @@ public class Puzzle {
 				
 				System.out.print("(" + i + "," + j + "):" + shit + " " + pix + " ");
 				if(pix == NO_TILE) {
-					map[i][j] = TileState.NO_TILE;
+					map[i][j] = new Cell(false, false, false, false, false);
 					continue;
 				}
 				if(pix == TILE) {
-					map[i][j] = TileState.TILE;
+					map[i][j] = new Cell();
 					continue;
 				}
 				
 				if(pix == TILE_WITH_BALL) {
-					map[i][j] = TileState.TILE_WITH_BALL;
+					map[i][j] = new Cell(true, false, false, true, false);
 					continue;
 				}
 				
 				if(pix == FINAL_TILE) {
-					map[i][j] = TileState.FINAL_TILE;
+					map[i][j] = new Cell(true, false, true, false, false);
 					continue;
 				}
 				
 				if(pix == INIT_TILE) {
-					map[i][j] = TileState.INIT_TILE;
+					map[i][j] = new Cell(true, true, false, false, false);
+					initCellY = i;
+					initCellX = j;
 					continue;
 				}
 			}
@@ -72,40 +75,25 @@ public class Puzzle {
 		}
 		
 		// Marcar las TILE colindantes a INIT_TILE como NEXT_TILE
-		for (int i = 0; i < map.length; i++) {
-			for (int j = 0; j < map[i].length; j++) {
-				if(map[i][j] == TileState.INIT_TILE) {
-					if(i + 1 < map.length) {
-						if(map[i + 1][j] == TileState.TILE)
-							map[i + 1][j] = TileState.NEXT_TILE;
-						if(map[i + 1][j] == TileState.TILE_WITH_BALL)
-							map[i + 1][j] = TileState.NEXT_TILE_WITH_BALL;
-					}
-					
-					if(i - 1 <= 0 ) {
-						if(map[i - 1][j] == TileState.TILE)
-							map[i - 1][j] = TileState.NEXT_TILE;
-						if(map[i - 1][j] == TileState.TILE_WITH_BALL)
-							map[i - 1][j] = TileState.NEXT_TILE_WITH_BALL;
-					}
-					
-					if(j + 1 < map[i].length ) {
-						if(map[i][j + 1] == TileState.TILE)
-							map[i][j + 1] = TileState.NEXT_TILE;
-						if(map[i][j + 1] == TileState.TILE_WITH_BALL)
-							map[i][j + 1] = TileState.NEXT_TILE_WITH_BALL;
-					}
-					
-					if(j - 1 <= 0 ) {
-						if(map[i][j - 1] == TileState.TILE)
-							map[i][j - 1] = TileState.NEXT_TILE;
-						if(map[i][j - 1] == TileState.TILE_WITH_BALL)
-							map[i][j - 1] = TileState.NEXT_TILE_WITH_BALL;
-					}
-					
-				}
-			}
+		if(initCellY + 1 < map.length) {
+			map[initCellY + 1][initCellX].setNextCell(true);
 		}
+		
+		if(initCellY - 1 >= 0 ) {
+			map[initCellY - 1][initCellX].setNextCell(true);
+		}
+		
+		if(initCellX + 1 < map[0].length ) {
+			map[initCellY][initCellX + 1].setNextCell(true);
+			
+		}
+		
+		if(initCellX - 1 >= 0 ) {
+			map[initCellY][initCellX - 1].setNextCell(true);
+		}
+		
+
+		
 
 		
 	}
@@ -113,11 +101,8 @@ public class Puzzle {
 	public void update(float delta) {
 		
 	}
-
-
 	
-	
-	public TileState[][] getMap() {
+	public Cell[][] getMap() {
 		return map;
 	}
 
