@@ -2,13 +2,18 @@ package es.wanderteam.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 
 
 public class Puzzle {
 	
+	int totalBalls = 0;
+	int actualBalls = 0;
 	Cell[][] map;
 	int initCellX, initCellY;
+	int actualCellX, actualCellY;
+	boolean completed = false;
 	
 	public Puzzle() {
 		loadFromPNG(Gdx.files.internal("level0.png"));
@@ -56,6 +61,7 @@ public class Puzzle {
 				
 				if(pix == TILE_WITH_BALL) {
 					map[i][j] = new Cell(true, false, false, true, false);
+					totalBalls++;
 					continue;
 				}
 				
@@ -66,8 +72,8 @@ public class Puzzle {
 				
 				if(pix == INIT_TILE) {
 					map[i][j] = new Cell(true, true, false, false, false);
-					initCellY = i;
-					initCellX = j;
+					initCellY = actualCellY = i;
+					initCellX = actualCellX = j;
 					continue;
 				}
 			}
@@ -92,22 +98,80 @@ public class Puzzle {
 			map[initCellY][initCellX - 1].setNextCell(true);
 		}
 		
-
-		
-
-		
 	}
 
 	public void update(float delta) {
 		
 	}
+
 	
 	public Cell[][] getMap() {
 		return map;
 	}
 
+	public void touchScreen(int x, int y, int pointer) {
+		for(int i = 0; i < map.length; ++i){
+			for(int j = 0; j < map[i].length; ++j){
+				if(map[i][j].isNormalCell() && map[i][j].getTileSprite().getBoundingRectangle().contains(x,y)) {
+					touchedCell(i, j);
+					break;
+				}
+			}
+		}
+		
+	}
+	private void touchedCell(int i, int j) {
+		Cell c = map[i][j];
+		if(c.isNextCell() && !c.isOldCell()) {
+			System.out.println("IS NEXT CELL");
+			if(c.isEndCell() && totalBalls == actualBalls) {
+				System.out.println("FINISHED!");
+				completed = true;
+			}
+			c.setNextCell(false);
+			c.setOldCell(true);
+			//if have ball; take the ball
+			if(c.isHaveBall()) {
+				c.setHaveBall(false);
+				c.setBallSprite(null);
+				actualBalls++;
+			}
+			
+			// Desmarcar los alrededores de la cell actual como next
+			if(actualCellY + 1 < map.length) map[actualCellY + 1][actualCellX].setNextCell(false);
+			
+			if(actualCellY - 1 >= 0 )map[actualCellY - 1][actualCellX].setNextCell(false);
+			
+			if(actualCellX + 1 < map[0].length ) map[actualCellY][actualCellX + 1].setNextCell(false);
+			
+			if(actualCellX - 1 >= 0 ) map[actualCellY][actualCellX - 1].setNextCell(false);
+			
+			
+			//Marcar los alrededores de la cell que a sido pulsada como next
+			if(i + 1 < map.length && !map[i + 1][j].isOldCell()) map[i + 1][j].setNextCell(true);
+			
+			if(i - 1 >= 0 && !map[i - 1][j].isOldCell() )map[i - 1][j].setNextCell(true);
+			
+			if(j + 1 < map[0].length && !map[i][j + 1].isOldCell() ) map[i][j + 1].setNextCell(true);
+			
+			if(j - 1 >= 0 && !map[i][j - 1 ].isOldCell() ) map[i][j - 1].setNextCell(true);
 
-
+			actualCellY = i;
+			actualCellX = j;
+			
+		}
+		
+	}
 	
+
+
+
+	public boolean isCompleted() {
+		return completed;
+	}
+
+
+
+
 	
 }

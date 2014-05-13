@@ -1,8 +1,5 @@
 package es.wanderteam.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class PuzzleRenderer {
 
 	Puzzle puzzle;
-	//Sprite[][] spriteMap;
-	//List<Sprite> ballSpriteList;
 	SpriteBatch spriteBatch = new SpriteBatch();
 	TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("Game.pack"));
 	
@@ -28,9 +23,7 @@ public class PuzzleRenderer {
 	
 	public PuzzleRenderer(Puzzle p) {
 		puzzle = p;
-		//ballSpriteList = new ArrayList<Sprite>();
 		createSprites();
-		puzzle = p;
 	}
 		
 	private void createSprites() {
@@ -40,10 +33,8 @@ public class PuzzleRenderer {
 		
 		tileSpriteWidth = ( screenWidth / numTilesWight ) - 2 * paddingWidth;
 		tileSpriteHeight = ( screenHeight / numTilesHeight ) - 2 * paddingHeight;
-		
-		//spriteMap = new Sprite[map.length][];
+
 		for(int i = 0; i < map.length; ++i) {
-			//spriteMap[i] = new Sprite[map[i].length];
 			for(int j = 0; j < map[i].length; ++j) {
 				
 				if(map[i][j].isNormalCell()) {
@@ -51,19 +42,17 @@ public class PuzzleRenderer {
 					if(map[i][j].isNextCell())
 						map[i][j].getTileSprite().setColor(Color.GRAY);
 					if(map[i][j].isInitCell())
-						map[i][j].getTileSprite().setColor(Color.GREEN);
+						map[i][j].getTileSprite().setColor(Color.YELLOW);
 					if(map[i][j].isEndCell())
 						map[i][j].getTileSprite().setColor(Color.BLUE);
 					if(map[i][j].isHaveBall())
 						map[i][j].setBallSprite(getBallSprite(i, j));
-					
 				}
 			}
 		}
 		
 	}
 
-	
 	private Sprite getTileSprite(int i, int j, Color c) {
 		Sprite theNewSprite;
 		theNewSprite = new Sprite(atlas.findRegion("tileBoxGreen"));

@@ -1,5 +1,6 @@
 package es.wanderteam.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
@@ -10,6 +11,7 @@ public class Cell {
 	private boolean endCell = false;
 	private boolean haveBall = false;
 	private boolean nextCell = false;
+	private boolean oldCell = false;
 	
 	private Sprite tileSprite = null;
 	private Sprite ballSprite = null;
@@ -43,6 +45,7 @@ public class Cell {
 
 	public void setInitCell(boolean initCell) {
 		this.initCell = initCell;
+		setColorByState();
 	}
 
 	public boolean isEndCell() {
@@ -51,6 +54,7 @@ public class Cell {
 
 	public void setEndCell(boolean endCell) {
 		this.endCell = endCell;
+		setColorByState();
 	}
 
 	public boolean isHaveBall() {
@@ -67,6 +71,16 @@ public class Cell {
 
 	public void setNextCell(boolean nextCell) {
 		this.nextCell = nextCell;
+		setColorByState();
+	}
+
+	public boolean isOldCell() {
+		return oldCell;
+	}
+
+	public void setOldCell(boolean oldCell) {
+		this.oldCell = oldCell;
+		setColorByState();
 	}
 
 	public Sprite getTileSprite() {
@@ -85,6 +99,33 @@ public class Cell {
 		this.ballSprite = ballSprite;
 	}
 
+	private void setColorByState(){
+		if(tileSprite != null) 
+		{
+			if(initCell == true) {
+				tileSprite.setColor(Color.YELLOW);
+				return;
+			}
+			if(endCell == true) {
+				tileSprite.setColor(Color.BLUE);
+				return;
+			}
+			
+			if(oldCell == true) {
+				tileSprite.setColor(Color.RED);
+				return;
+			}
+			if(nextCell == true) {
+				tileSprite.setColor(Color.GRAY);
+				return;
+			}
+			
+			
+			tileSprite.setColor(Color.WHITE);
+			return;	
+		}
+		
+	}
 
 
 	
