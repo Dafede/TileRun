@@ -1,8 +1,8 @@
 package es.wanderteam.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 
 
@@ -14,6 +14,11 @@ public class Puzzle {
 	int initCellX, initCellY;
 	int actualCellX, actualCellY;
 	boolean completed = false;
+	
+	Sound blopSound = Gdx.audio.newSound(Gdx.files.internal("sound/blop.mp3"));
+	Sound boingSound = Gdx.audio.newSound(Gdx.files.internal("sound/boing.mp3"));
+	Sound eenggSound = Gdx.audio.newSound(Gdx.files.internal("sound/eengg.mp3"));
+	Sound yeahSound = Gdx.audio.newSound(Gdx.files.internal("sound/yeah.mp3"));
 	
 	public Puzzle() {
 		loadFromPNG(Gdx.files.internal("level0.png"));
@@ -123,10 +128,14 @@ public class Puzzle {
 	private void touchedCell(int i, int j) {
 		Cell c = map[i][j];
 		if(c.isNextCell() && !c.isOldCell()) {
-			System.out.println("IS NEXT CELL");
-			if(c.isEndCell() && totalBalls == actualBalls) {
-				System.out.println("FINISHED!");
-				completed = true;
+			
+			if(c.isEndCell()) {
+				if(totalBalls == actualBalls) {
+					completed = true;
+					yeahSound.play();
+				} else {
+					eenggSound.play();
+				}
 			}
 			c.setNextCell(false);
 			c.setOldCell(true);
@@ -135,6 +144,9 @@ public class Puzzle {
 				c.setHaveBall(false);
 				c.setBallSprite(null);
 				actualBalls++;
+				boingSound.play();
+			}else {
+				blopSound.play();
 			}
 			
 			// Desmarcar los alrededores de la cell actual como next
