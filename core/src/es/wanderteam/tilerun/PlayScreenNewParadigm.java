@@ -1,22 +1,19 @@
 package es.wanderteam.tilerun;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 import es.wanderteam.game.Puzzle;
 import es.wanderteam.game.PuzzleRenderer;
-import es.wanderteam.game.TileState;
 
 public class PlayScreenNewParadigm implements Screen, InputProcessor {
 
@@ -27,40 +24,15 @@ public class PlayScreenNewParadigm implements Screen, InputProcessor {
 	/** Visual game data **/
 	TextureAtlas atlas;
 	Skin gameVisualSkin;
-	
-	int[][] level1 = new int[][]{
-			{ 0, 1, 2, 1},
-			{ 3, 1, 0, 1},
-			{ 0, 1, 1, 1},
-			{ 0, 0, 0, 1},
-			{ 1, 1, 1, 2},
-			{ 1, 0, 0, 1},
-			{ 2, 1, 1, 1},
-			{ 0, 0, 0, 5},
-			{ 0, 0, 0, 4}
-	};
-	int[][] level2 = new int[][]{
-			{ 2, 1, 1, 1, 3},
-			{ 1, 0, 1, 2, 2},
-			{ 1, 1, 2, 1, 1},
-			{ 5, 0, 1, 1, 2},
-			{ 4, 5, 1, 2, 1}
-	};
-	int[][] level3 = new int[][]{
-			{ 0, 0, 3, 0, 0},
-			{ 2, 2, 1, 1, 2},
-			{ 1, 1, 1, 1, 1},
-			{ 1, 1, 1, 1, 1},
-			{ 1, 2, 2, 2, 1},
-			{ 1, 0, 1, 1, 2},
-			{ 1, 2, 1, 0, 1},
-			{ 1, 2, 1, 1, 1},
-			{ 0, 5, 4, 0, 0}
-	};
-	ArrayList<TileState[][]> listaBoard = new ArrayList<TileState[][]>();
 		
 	Puzzle puzzle;
 	PuzzleRenderer renderer;
+	
+	
+	public PlayScreenNewParadigm(String level) {
+		puzzle = new Puzzle(level);
+		renderer = new PuzzleRenderer(puzzle);
+	}
 	
 	@Override
 	public void show() {
@@ -69,14 +41,8 @@ public class PlayScreenNewParadigm implements Screen, InputProcessor {
 		Gdx.input.setInputProcessor(this);
 		atlas = new TextureAtlas(Gdx.files.internal("Game.pack"));
 		gameVisualSkin = new Skin(atlas);
-		//listaBoard.add(level1);
-		//listaBoard.add(level2);
-		//listaBoard.add(level3);
 		
-		puzzle = new Puzzle();
-		renderer = new PuzzleRenderer(puzzle);
 		
-		//winFont = new BitmapFont(Gdx.files.internal("Calibri.fnt"),Gdx.files.internal("Calibri.png"),false);
 	}
 	
 	
@@ -134,7 +100,9 @@ public class PlayScreenNewParadigm implements Screen, InputProcessor {
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		if(Keys.DEL == keycode) {
+			((Game)Gdx.app.getApplicationListener()).setScreen(new SelectionScreen());
+		}
 		return false;
 	}
 

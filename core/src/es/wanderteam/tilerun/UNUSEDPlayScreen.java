@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-public class PlayScreen implements Screen, InputProcessor {
+public class UNUSEDPlayScreen implements Screen, InputProcessor {
 
 	SpriteBatch batch;
 	BitmapFont winFont;

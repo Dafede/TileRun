@@ -20,10 +20,9 @@ public class Puzzle {
 	Sound eenggSound = Gdx.audio.newSound(Gdx.files.internal("sound/eengg.mp3"));
 	Sound yeahSound = Gdx.audio.newSound(Gdx.files.internal("sound/yeah.mp3"));
 	
-	public Puzzle() {
-		loadFromPNG(Gdx.files.internal("level0.png"));
+	public Puzzle(String file) {
+		loadFromPNG(Gdx.files.internal(file));
 	}
-	
 	
 	
 	/**Genera el puzzle a partir de un PNG con las caracteristica siguientes por pixel:

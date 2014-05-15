@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import es.wanderteam.game.TileState;
 
 
-public class PuzzlemALO{
+public class UNUSEDPuzzlemALO{
 	
 	TileState[][] initialBoard;
 	//PuzzleTile[][] boardPuzzleTile;
@@ -19,7 +19,7 @@ public class PuzzlemALO{
 	float padding = 0.01f;
 	float puzzleTileWidth, puzzleTileHeight;
 	
-	public PuzzlemALO(TileState[][] initialBoard, Skin skin) {
+	public UNUSEDPuzzlemALO(TileState[][] initialBoard, Skin skin) {
 		super();
 		
 		this.initialBoard = initialBoard;

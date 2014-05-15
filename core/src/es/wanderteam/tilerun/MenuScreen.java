@@ -67,7 +67,7 @@ public class MenuScreen implements Screen{
 				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
 					@Override
 					public void run() {
-						((Game)Gdx.app.getApplicationListener()).setScreen(new PlayScreenNewParadigm());
+						((Game)Gdx.app.getApplicationListener()).setScreen(new SelectionScreen());
 					}
 				})));
 				super.touchUp(event, x, y, pointer, button);
