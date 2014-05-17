@@ -89,6 +89,7 @@ public class PlayScreenNewParadigm implements Screen, InputProcessor {
 	public void dispose() {
 		// TODO Auto-generated method stub
 		batch.dispose();
+		gameVisualSkin.dispose();
 	}
 
 	@Override

@@ -13,11 +13,13 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
@@ -31,7 +33,18 @@ public class SelectionScreen implements Screen, InputProcessor{
 	
 	Image background;
 	
-	List<String> listLevelNames = new ArrayList<String>(Arrays.asList("level1.png", "level2.png", "level3.png"));
+	List<String> listLevelNames = new ArrayList<String>(Arrays.asList(
+			"level1.png", "level2.png", "level3.png",
+			"unimplemented","unimplemented","unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented",  
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented", 
+			"unimplemented", "unimplemented", "unimplemented", "unimplemented", "unimplemented"
+			));
 	List<TextButton> listButtons = new ArrayList<TextButton>();
 	
 	TextButtonStyle tbsSelection;
@@ -79,8 +92,21 @@ public class SelectionScreen implements Screen, InputProcessor{
 		
 		ScrollPane scroller = new ScrollPane(nuevoTable);
 		
-		nuevoTable.pad(0).defaults().expandX().fillX();
+		InputListener stopTouchDown = new InputListener() {
+			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+				event.stop();
+				return false;
+			}
+			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+				event.stop();
+			}
+
+		};
 		
+		scroller.addListener(stopTouchDown);
+		
+		nuevoTable.pad(0).defaults().expandX().fillX();
+
 		for(int i = 0; i < listLevelNames.size(); ++i) {
 			nuevoTable.row().pad(5);
 			TextButton button = new TextButton(listLevelNames.get(i), tbsSelection);
@@ -88,14 +114,7 @@ public class SelectionScreen implements Screen, InputProcessor{
 			button.addListener(new ClickListener(){
 
 				@Override
-				public boolean touchDown(InputEvent event, float x, float y,
-						int pointer, int button) {
-					return super.touchDown(event, x, y, pointer, button);
-				}
-
-				@Override
-				public void touchUp(InputEvent event, float x, float y,
-						int pointer, int button) {
+				public void clicked(InputEvent event, float x, float y) {
 					final String level = event.getListenerActor().getName();
 					stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
 						@Override
@@ -103,7 +122,7 @@ public class SelectionScreen implements Screen, InputProcessor{
 							((Game)Gdx.app.getApplicationListener()).setScreen(new PlayScreenNewParadigm(level));
 						}
 					})));
-					super.touchUp(event, x, y, pointer, button);
+					super.clicked(event, x, y);
 				}
 				
 			});
@@ -148,7 +167,8 @@ public class SelectionScreen implements Screen, InputProcessor{
 	@Override
 	public void dispose() {
 		// TODO Auto-generated method stub
-		
+		stage.dispose();
+		uiSkin.dispose();
 	}
 
 	@Override
