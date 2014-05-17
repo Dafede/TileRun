@@ -3,6 +3,7 @@ package es.wanderteam.tilerun;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,9 +14,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MenuScreen implements Screen{
+	
+	static Music technoMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/techno.mp3"));
+	
 	Stage stage;
 	Skin uiSkin;
 	
@@ -30,6 +33,7 @@ public class MenuScreen implements Screen{
 	@Override
 	public void show() {
 		
+		technoMusic.play();
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
