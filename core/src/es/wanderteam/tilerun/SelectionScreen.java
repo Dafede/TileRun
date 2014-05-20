@@ -92,18 +92,6 @@ public class SelectionScreen implements Screen, InputProcessor{
 		
 		ScrollPane scroller = new ScrollPane(nuevoTable);
 		
-		InputListener stopTouchDown = new InputListener() {
-			public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-				event.stop();
-				return false;
-			}
-			public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-				event.stop();
-			}
-
-		};
-		
-		scroller.addListener(stopTouchDown);
 		
 		nuevoTable.pad(0).defaults().expandX().fillX();
 
