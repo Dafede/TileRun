@@ -3,7 +3,6 @@ package es.wanderteam.tilerun;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -13,15 +12,18 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class MenuScreen implements Screen{
 	
-	static Music technoMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/techno.mp3"));
+	//static Music technoMusic = Gdx.audio.newMusic(Gdx.files.internal("sound/techno.mp3"));
 	
 	Stage stage;
 	Skin uiSkin;
 	
+	Table buttonContainer;
 	Image background;
 	ImageButton ibPlay;
 	ImageButtonStyle ibsPlay;
@@ -32,8 +34,7 @@ public class MenuScreen implements Screen{
 	
 	@Override
 	public void show() {
-		
-		technoMusic.play();
+		//technoMusic.play();
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
@@ -47,16 +48,19 @@ public class MenuScreen implements Screen{
 		stage.addActor(background);
 		
 		
+		buttonContainer = new Table();
+		buttonContainer.debug();
+		buttonContainer.setFillParent(true);
+		buttonContainer.pad(0).defaults().expandX().fillX();
+		stage.addActor(buttonContainer);
+		
 		//Create the style of the play button, create the playbutton whit that style,
 		//positioning the play button and adding it to the stage
+		buttonContainer.row().pad(10);
 		ibsPlay = new ImageButtonStyle();
 		ibsPlay.imageUp = uiSkin.getDrawable("buttonPlay");
 		
-
 		ibPlay = new ImageButton(ibsPlay);
-		ibPlay.setName("UI_PLAY_BUTTON");
-		ibPlay.setX((Gdx.graphics.getWidth() - ibPlay.getWidth()) / 2);
-		ibPlay.setY((Gdx.graphics.getHeight() * 1.5f  - ibPlay.getHeight()) / 2);
 		ibPlay.addListener(new ClickListener(){
 
 			@Override
@@ -79,50 +83,16 @@ public class MenuScreen implements Screen{
 			
 		});
 		
-		stage.addActor(ibPlay);
+		buttonContainer.add(ibPlay).expandX().fillX();
 		
-		//Create the style of the play button, create the options button whit that style,
-		//positioning the play button and adding it to the stage
-		ibsOptions = new ImageButtonStyle();
-		ibsOptions.imageUp = uiSkin.getDrawable("buttonOptions");
-		
-		ibOptions = new ImageButton(ibsOptions);
-		ibOptions.setX((Gdx.graphics.getWidth() - ibOptions.getWidth()) / 2);
-		ibOptions.setY((Gdx.graphics.getHeight() * 0.5f - ibOptions.getHeight()) / 2);
-		ibOptions.addListener(new ClickListener(){
-
-			@Override
-			public boolean touchDown(InputEvent event, float x, float y,
-					int pointer, int button) {
-				// TODO Auto-generated method stub
-				return super.touchDown(event, x, y, pointer, button);
-			}
-
-			@Override
-			public void touchUp(InputEvent event, float x, float y,
-					int pointer, int button) {
-				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
-					
-					@Override
-					public void run() {
-						((Game)Gdx.app.getApplicationListener()).setScreen(new OptionsScreen());
-					}
-				})));
-				super.touchUp(event, x, y, pointer, button);
-			}
-			
-		});
-		
-		stage.addActor(ibOptions);
 		
 		//Create the style of the play button, create the score button whit that style,
 		//positioning the play button and adding it to the stage
+		buttonContainer.row().pad(10);
 		ibsScore = new ImageButtonStyle();
 		ibsScore.imageUp = uiSkin.getDrawable("buttonScore");
 		
 		ibScore = new ImageButton(ibsScore);
-		ibScore.setX((Gdx.graphics.getWidth() - ibScore.getWidth()) / 2);
-		ibScore.setY((Gdx.graphics.getHeight() - ibScore.getHeight()) / 2);
 		ibScore.addListener(new ClickListener(){
 
 			@Override
@@ -147,7 +117,42 @@ public class MenuScreen implements Screen{
 			}
 			
 		});
-		stage.addActor(ibScore);
+		buttonContainer.add(ibScore).expandX().fillX();
+		
+		
+		//Create the style of the play button, create the options button whit that style,
+		//positioning the play button and adding it to the stage
+		buttonContainer.row().pad(10);
+		ibsOptions = new ImageButtonStyle();
+		ibsOptions.imageUp = uiSkin.getDrawable("buttonOptions");
+		
+		ibOptions = new ImageButton(ibsOptions);
+		ibOptions.addListener(new ClickListener(){
+
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y,
+					int pointer, int button) {
+				// TODO Auto-generated method stub
+				return super.touchDown(event, x, y, pointer, button);
+			}
+
+			@Override
+			public void touchUp(InputEvent event, float x, float y,
+					int pointer, int button) {
+				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
+					
+					@Override
+					public void run() {
+						((Game)Gdx.app.getApplicationListener()).setScreen(new OptionsScreen());
+					}
+				})));
+				super.touchUp(event, x, y, pointer, button);
+			}
+			
+		});
+		
+		buttonContainer.add(ibOptions).expandX().fillX();
+		buttonContainer.row().pad(10);
 		
 		
 	}
@@ -159,6 +164,7 @@ public class MenuScreen implements Screen{
 		
 		stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
+        Table.drawDebug(stage);
 	}
 
 	@Override
