@@ -53,10 +53,7 @@ public class PlayScreenNewParadigm implements Screen, InputProcessor {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		puzzle.update(delta);
 		renderer.render(delta);
-		
-		if(puzzle.isCompleted()) {
-			((Game)Gdx.app.getApplicationListener()).setScreen(new MenuScreen());
-		}
+
 		
 		fps.log();
 	}

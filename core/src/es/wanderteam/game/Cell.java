@@ -12,6 +12,7 @@ public class Cell {
 	private boolean haveBall = false;
 	private boolean nextCell = false;
 	private boolean oldCell = false;
+	private int passesCell = 1;
 	
 	private Sprite tileSprite = null;
 	private Sprite ballSprite = null;
@@ -21,18 +22,20 @@ public class Cell {
 	}
 	
 	public Cell(boolean normalCell, boolean initCell, boolean endCell,
-			boolean haveBall, boolean nextCell) {
+			boolean haveBall, boolean nextCell, boolean oldCell, int passes) {
 		super();
 		this.normalCell = normalCell;
 		this.initCell = initCell;
 		this.endCell = endCell;
 		this.haveBall = haveBall;
 		this.nextCell = nextCell;
+		this.oldCell = oldCell;
+		this.passesCell = passes;
 	}
 	
 	public void draw(Batch spriteBatch) {
-		if(tileSprite != null) tileSprite.draw(spriteBatch);
-		if(ballSprite != null) ballSprite.draw(spriteBatch);
+		if(normalCell) tileSprite.draw(spriteBatch);
+		if(haveBall) ballSprite.draw(spriteBatch);
 	}
 	
 	public boolean isNormalCell() {
@@ -82,6 +85,14 @@ public class Cell {
 		this.oldCell = oldCell;
 		setColorByState();
 	}
+	
+	public int getPassesCell() {
+		return passesCell;
+	}
+
+	public void setPassesCell(int passes) {
+		this.passesCell = passes;
+	}
 
 	public Sprite getTileSprite() {
 		return tileSprite;
@@ -100,6 +111,7 @@ public class Cell {
 	}
 
 	private void setColorByState(){
+		
 		if(tileSprite != null) 
 		{
 			if(initCell == true) {
@@ -110,7 +122,6 @@ public class Cell {
 				tileSprite.setColor(Color.BLUE);
 				return;
 			}
-			
 			if(oldCell == true) {
 				tileSprite.setColor(Color.RED);
 				return;
@@ -119,8 +130,6 @@ public class Cell {
 				tileSprite.setColor(Color.GRAY);
 				return;
 			}
-			
-			
 			tileSprite.setColor(Color.WHITE);
 			return;	
 		}

@@ -92,6 +92,10 @@ public class SelectionScreen implements Screen, InputProcessor{
 		
 		ScrollPane scroller = new ScrollPane(nuevoTable);
 		
+<<<<<<< HEAD
+=======
+		
+>>>>>>> 425a4ce56f74619a44f08aebbd674678e019287f
 		nuevoTable.pad(0).defaults().expandX().fillX();
 
 		for(int i = 0; i < listLevelNames.size(); ++i) {

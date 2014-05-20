@@ -1,9 +1,12 @@
 package es.wanderteam.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
+
+import es.wanderteam.tilerun.MenuScreen;
 
 
 public class Puzzle {
@@ -42,6 +45,8 @@ public class Puzzle {
 		int INIT_TILE = 0x00ff00; //GREEN
 		int FINAL_TILE = 0x0000ff; // BLUE
 		int TILE_WITH_BALL = 0xffff00; //YELLOW
+		int TWO_PASSES_TILE = 0xff0000;
+		int THREE_PASSES_TILE = 0xff00ff;
 		
 		Pixmap pixmap = new Pixmap(fileHandle);
 		map = new Cell[pixmap.getHeight()][pixmap.getWidth()];
@@ -55,27 +60,33 @@ public class Puzzle {
 				
 				System.out.print("(" + i + "," + j + "):" + shit + " " + pix + " ");
 				if(pix == NO_TILE) {
-					map[i][j] = new Cell(false, false, false, false, false);
+					map[i][j] = new Cell(false, false, false, false, false, false, 0);
 					continue;
 				}
+				
 				if(pix == TILE) {
 					map[i][j] = new Cell();
 					continue;
 				}
 				
 				if(pix == TILE_WITH_BALL) {
-					map[i][j] = new Cell(true, false, false, true, false);
+					map[i][j] = new Cell(true, false, false, true, false, false, 1);
 					totalBalls++;
 					continue;
 				}
 				
 				if(pix == FINAL_TILE) {
-					map[i][j] = new Cell(true, false, true, false, false);
+					map[i][j] = new Cell(true, false, true, false, false, false, 1);
+					continue;
+				}
+				
+				if(pix == TWO_PASSES_TILE){
+					map[i][j] = new Cell(true, false, true, false, false, false, 2);
 					continue;
 				}
 				
 				if(pix == INIT_TILE) {
-					map[i][j] = new Cell(true, true, false, false, false);
+					map[i][j] = new Cell(true, true, false, false, false, false, 1);
 					initCellY = actualCellY = i;
 					initCellX = actualCellX = j;
 					continue;
@@ -126,12 +137,15 @@ public class Puzzle {
 	}
 	private void touchedCell(int i, int j) {
 		Cell c = map[i][j];
-		if(c.isNextCell() && !c.isOldCell()) {
+		
+		if(c.getPassesCell() > 0 && c.isNextCell() && !c.isOldCell()) {
+			
 			
 			if(c.isEndCell()) {
 				if(totalBalls == actualBalls) {
 					completed = true;
 					yeahSound.play();
+					((Game)Gdx.app.getApplicationListener()).setScreen(new MenuScreen());
 				} else {
 					eenggSound.play();
 				}

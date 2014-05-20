@@ -34,7 +34,12 @@ public class MenuScreen implements Screen{
 	
 	@Override
 	public void show() {
+<<<<<<< HEAD
 		//technoMusic.play();
+=======
+		//Gdx.input.setCatchBackKey(true);
+		technoMusic.play();
+>>>>>>> 425a4ce56f74619a44f08aebbd674678e019287f
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
@@ -66,12 +71,16 @@ public class MenuScreen implements Screen{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
+				ibPlay.setWidth(ibPlay.getWidth() + 10);
+				ibPlay.setHeight(ibPlay.getHeight() + 10);
 				return super.touchDown(event, x, y, pointer, button);
 			}
 
 			@Override
 			public void touchUp(InputEvent event, float x, float y,
 					int pointer, int button) {
+				ibPlay.setWidth(ibPlay.getWidth() - 10);
+				ibPlay.setHeight(ibPlay.getHeight() - 10);
 				stage.addAction(Actions.sequence(Actions.fadeOut(0.1f),Actions.run(new Runnable() {
 					@Override
 					public void run() {
@@ -98,7 +107,7 @@ public class MenuScreen implements Screen{
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y,
 					int pointer, int button) {
-				// TODO Auto-generated method stub
+				
 				return super.touchDown(event, x, y, pointer, button);
 			}
 
@@ -154,7 +163,7 @@ public class MenuScreen implements Screen{
 		buttonContainer.add(ibOptions).expandX().fillX();
 		buttonContainer.row().pad(10);
 		
-		
+		//atlas.dispose();
 	}
 	
 	@Override
