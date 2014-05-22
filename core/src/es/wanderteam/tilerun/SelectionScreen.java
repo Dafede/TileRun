@@ -10,20 +10,20 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import es.wanderteam.game.AnimatedImage;
 
 public class SelectionScreen implements Screen, InputProcessor{
 
@@ -31,7 +31,7 @@ public class SelectionScreen implements Screen, InputProcessor{
 	Table container;
 	Skin uiSkin;
 	
-	Image background;
+	AnimatedImage background;
 	
 	List<String> listLevelNames = new ArrayList<String>(Arrays.asList(
 			"level1.png", "level2.png", "level3.png",
@@ -74,7 +74,7 @@ public class SelectionScreen implements Screen, InputProcessor{
 		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("UI.pack"));
 		uiSkin = new Skin(atlas);
 		/** Set the background **/
-		background = new Image(uiSkin.getDrawable("mainScreen"));
+		background = new AnimatedImage(new Animation(1/15f, new TextureAtlas(Gdx.files.internal("backgroundAnimation.atlas")).getRegions()));
 		background.setWidth(Gdx.graphics.getWidth());
 		background.setHeight(Gdx.graphics.getHeight());
 		stage.addActor(background);
@@ -91,11 +91,7 @@ public class SelectionScreen implements Screen, InputProcessor{
 		Table nuevoTable = new Table();
 		
 		ScrollPane scroller = new ScrollPane(nuevoTable);
-		
-<<<<<<< HEAD
-=======
-		
->>>>>>> 425a4ce56f74619a44f08aebbd674678e019287f
+
 		nuevoTable.pad(0).defaults().expandX().fillX();
 
 		for(int i = 0; i < listLevelNames.size(); ++i) {

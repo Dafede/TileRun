@@ -4,17 +4,18 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton.ImageButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
+import es.wanderteam.game.AnimatedImage;
 
 public class MenuScreen implements Screen{
 	
@@ -24,7 +25,7 @@ public class MenuScreen implements Screen{
 	Skin uiSkin;
 	
 	Table buttonContainer;
-	Image background;
+	AnimatedImage background;
 	ImageButton ibPlay;
 	ImageButtonStyle ibsPlay;
 	ImageButton ibOptions;
@@ -34,12 +35,9 @@ public class MenuScreen implements Screen{
 	
 	@Override
 	public void show() {
-<<<<<<< HEAD
 		//technoMusic.play();
-=======
+
 		//Gdx.input.setCatchBackKey(true);
-		technoMusic.play();
->>>>>>> 425a4ce56f74619a44f08aebbd674678e019287f
 		
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
@@ -47,7 +45,8 @@ public class MenuScreen implements Screen{
 		uiSkin = new Skin(atlas);
 		
 		//Create and add background
-		background = new Image(uiSkin.getDrawable("mainScreen"));
+		
+		background = new AnimatedImage(new Animation(1/15f, new TextureAtlas(Gdx.files.internal("backgroundAnimation.atlas")).getRegions()));
 		background.setWidth(Gdx.graphics.getWidth());
 		background.setHeight(Gdx.graphics.getHeight());
 		stage.addActor(background);
@@ -173,7 +172,7 @@ public class MenuScreen implements Screen{
 		
 		stage.act(Gdx.graphics.getDeltaTime());
         stage.draw();
-        Table.drawDebug(stage);
+        //Table.drawDebug(stage);
 	}
 
 	@Override
